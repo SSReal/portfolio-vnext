@@ -12,6 +12,8 @@ export default async function handler(
     req: NextApiRequest, 
     res: NextApiResponse<Data>,
 ) {
+    console.log(URI);
+    console.log(client);
     const c = await client.connect()
     .catch((err) => {
         console.log(err);
