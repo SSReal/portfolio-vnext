@@ -98,7 +98,7 @@ function Home({
         <div>
             <Head>
                 <meta property="description" content={`Portfolio of ${name}`} />
-                <title>{name} | {shortDesignation}</title>
+                <title>{`${name} | ${shortDesignation}`}</title>
             </Head>
 
             <main>
