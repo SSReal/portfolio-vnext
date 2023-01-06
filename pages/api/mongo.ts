@@ -1,24 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import {MongoClient, ServerApiVersion} from "mongodb";
-
-type Data = {
-    message: string
-}
-
-const URI = `mongodb+srv://sajal:${process.env.MONGO_PASSWORD}@portfolio-data-1.prqrq3y.mongodb.net/?retryWrites=true&w=majority`
-const client = new MongoClient(URI);
+import client from "../../data/mongo";
 
 export default async function handler(
     req: NextApiRequest, 
-    res: NextApiResponse<Data>,
+    res: NextApiResponse<Object>,
 ) {
-    const c = await client.connect()
-    .catch((err) => {
-        console.log(err);
-        res.status(500).send({
-            message: err.toString()
-        })
-    })
-    client.close();
-    res.status(200).send({message: "successful"});
+    const db = client.db('data');
+    const coll = db.collection('profile-data');
+
+    const findResult = await coll.find();
+    const result = await findResult.toArray();
+    res.status(200).send(result);
 }
