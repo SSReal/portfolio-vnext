@@ -93,7 +93,6 @@ function Home({
             {(contact !== undefined) && <p className=" py-2 px-5 text-xl"><a href="#contact" >CONTACT</a></p>}
         </>
     )
-    console.log(contact);
     return (
         <div>
             <Head>

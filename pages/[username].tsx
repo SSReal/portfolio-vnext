@@ -12,7 +12,6 @@ export default ProfileHome;
 
 export async function getStaticPaths() {
     const allUsernames = await findUsernames();
-    console.log(allUsernames);
     return {
         paths: allUsernames.map((val, idx) => {
             return {
@@ -26,7 +25,6 @@ export async function getStaticPaths() {
 };
 
 export async function getStaticProps(context:GetStaticPropsContext) {
-    console.log(context.params?.username);
     const username = context.params?.username || "sajals";
     return {
         props: await findOne({username}),
