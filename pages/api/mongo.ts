@@ -6,11 +6,7 @@ type Data = {
 }
 
 const URI = `mongodb+srv://sajal:${process.env.MONGO_PASSWORD}@portfolio-data-1.prqrq3y.mongodb.net/?retryWrites=true&w=majority`
-const client = new MongoClient(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverApi: ServerApiVersion.v1
-});
+const client = new MongoClient(URI);
 
 export default async function handler(
     req: NextApiRequest, 
