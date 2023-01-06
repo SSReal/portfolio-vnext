@@ -4,7 +4,6 @@ import Home from "./index";
 import {db, coll, findOne, findUsernames} from "../data/mongo";
 
 function ProfileHome(profile: HomeProps) {
-
     return <Home {...profile} />
 }
 
