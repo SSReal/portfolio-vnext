@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 interface Link {
     type: string,
     link: string
@@ -26,6 +28,8 @@ interface Contact {
 
 interface HomeProps {
     name: string, 
+    username: string,
+    // _id: ObjectId,
     shortDesignation: string,
     designationLine: string,
     links: Link[],
