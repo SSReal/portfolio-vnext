@@ -144,7 +144,7 @@ function Home({
                 <section className=" w-full my-10 bg-slate-800 overflow:hidden text-sky-300 text-7xl flex justify-center mx-auto py-10 px-20 flex-wrap">
                     {
                         skills.map((text, idx) =>
-                            <div key={idx} className="text-center">
+                            <div key={idx} className="text-center mx-2 my-2">
                                 {getSkillIcon(text)}
                                 <p className="text-sm text-white font-semibold" >{text}</p>
                             </div>
