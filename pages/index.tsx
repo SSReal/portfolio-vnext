@@ -1,27 +1,26 @@
 import Head from "next/head";
 import Image from "next/image";
 import profilePhoto from "../public/profile.jpg";
-import { DiReact } from "react-icons/di";
+
+import { DiReact, DiJavascript1 } from "react-icons/di";
 import { TbBrandNextjs } from "react-icons/tb";
 import { RiFlutterFill } from "react-icons/ri";
-import { SiSpring } from "react-icons/si";
-import { FaPython } from "react-icons/fa";
-import { DiJavascript1 } from "react-icons/di";
-import { SiCplusplus, SiLeetcode } from "react-icons/si";
-import { AiFillGithub, AiFillLinkedin } from "react-icons/ai";
+import { SiSpring, SiCplusplus, SiLeetcode } from "react-icons/si";
+import { FaPython, FaArrowUp } from "react-icons/fa";
+import { AiFillGithub, AiFillLinkedin, AiOutlineMenu } from "react-icons/ai";
 import { MdEmail } from "react-icons/md";
+import { CgScrollH } from "react-icons/cg";
+import { BsFillTelephoneFill } from "react-icons/bs";
+import { ImLocation } from "react-icons/im";
+
 import Link from "next/link";
 import Project from "../components/project";
 import ProjectDisplay from "../components/ProjectDisplay";
 import { NextPageContext } from "next";
 import { useState } from "react";
-import { AiOutlineMenu } from "react-icons/ai"
-import { FaArrowUp } from "react-icons/fa"
 import Experience from "../components/experience";
 import ExpDisplay from "../components/ExperienceDisplay";
-import { CgScrollH } from "react-icons/cg";
-import { BsFillTelephoneFill } from "react-icons/bs";
-import { ImLocation } from "react-icons/im";
+
 
 function Home({ projects, experience }: { projects: Project[], experience: Experience[] }) {
 
