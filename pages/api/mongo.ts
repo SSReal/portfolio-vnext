@@ -5,7 +5,7 @@ type Data = {
     message: string
 }
 
-const URI = `mongodb+srv://sajal:${process.env.MONGO_PASSWORD}@portfolio-data-1.prqrq3y.mongodb.net/?retryWrites=true&w=majority`
+const URI = `mongodb+srv://saja:${process.env.MONGO_PASSWORD}@portfolio-data-1.prqrq3y.mongodb.net/?retryWrites=true&w=majority`
 const client = new MongoClient(URI);
 
 export default async function handler(
