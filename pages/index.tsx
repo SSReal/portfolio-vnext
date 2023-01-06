@@ -19,9 +19,9 @@ import { AiOutlineMenu } from "react-icons/ai"
 import { FaArrowUp } from "react-icons/fa"
 import Experience from "../components/experience";
 import ExpDisplay from "../components/ExperienceDisplay";
-import {CgScrollH} from "react-icons/cg";
-import {BsFillTelephoneFill} from "react-icons/bs";
-import {ImLocation} from "react-icons/im";
+import { CgScrollH } from "react-icons/cg";
+import { BsFillTelephoneFill } from "react-icons/bs";
+import { ImLocation } from "react-icons/im";
 
 function Home({ projects, experience }: { projects: Project[], experience: Experience[] }) {
 
@@ -42,6 +42,7 @@ function Home({ projects, experience }: { projects: Project[], experience: Exper
                 <meta property="description" content="Portfolio of Sajal Singhal" />
                 <title>Sajal Singhal | Developer</title>
             </Head>
+
             <main>
                 <button className={`sticky top-0 md:hidden bg-slate-900 text-white p-3 ${!menu && "rounded-br-lg"} z-20`} onClick={() => setMenu(!menu)}><AiOutlineMenu /></button>
                 {
@@ -61,7 +62,7 @@ function Home({ projects, experience }: { projects: Project[], experience: Exper
                             <h1 className="text-5xl pb-2 text-sky-700 font-bold drop-shadow-sm">Sajal Singhal</h1>
                             <h2 className=" text-xl pb-2">Developer, Designer, CS Enthusiast</h2>
 
-                            <div className="flex max-w-xl justify-evenly text-2xl px-10 py-5 mx-auto">
+                            <div className="flex max-w-xl justify-evenly text-5xl px-10 py-5 mx-auto">
                                 <Link target="_blank" href="https://github.com/SSReal">
                                     <AiFillGithub />
                                 </Link>
@@ -90,7 +91,7 @@ function Home({ projects, experience }: { projects: Project[], experience: Exper
 
                 {/* Skills Section */}
                 <div id="skills" />
-                <section className="w-full my-10 bg-slate-800 overflow:hidden text-sky-300 text-7xl flex justify-center mx-auto py-10 px-20 flex-wrap">
+                <section className=" w-full my-10 bg-slate-800 overflow:hidden text-sky-300 text-7xl flex justify-center mx-auto py-10 px-20 flex-wrap">
                     <div className="text-center">
                         <DiReact />
                         <p className="text-sm text-white font-semibold" >React</p>
@@ -123,7 +124,7 @@ function Home({ projects, experience }: { projects: Project[], experience: Exper
 
                 {/* Projects Section */}
                 <div id="projects" />
-                <section className=" my-20 md:max-w-full mx-auto px-5 pb-10">
+                <section className=" md:max-w-full mx-auto px-5 pb-10">
                     <h1 className="text-5xl font-bold pt-10">PROJECTS</h1>
                     <p className="text-4xl"><CgScrollH /></p>
                     <div className="hide-scrollbar flex overflow-x-scroll items-stretch">
@@ -135,37 +136,36 @@ function Home({ projects, experience }: { projects: Project[], experience: Exper
 
                 {/* Experience Section */}
                 <div id="experience" />
-                <section className="bg-slate-800 my-20 md:max-w-full mx-auto px-5 pb-10">
+                <section className="bg-slate-800 md:max-w-full mx-auto px-5">
                     <h1 className="text-5xl text-white pt-10 font-bold self-start">EXPERIENCE</h1>
                     <p className="text-white text-4xl"><CgScrollH /></p>
                     <div className="flex justify-center gap:5">
-                    {
-                        experience.map((exp, idx) => <ExpDisplay key={idx} exp={exp} />)
-                    }
+                        {
+                            experience.map((exp, idx) => <ExpDisplay key={idx} exp={exp} />)
+                        }
                     </div>
                 </section>
 
                 {/* Contact Section */}
-                <div id="contact" />
-                <section className="w-max mx-auto pb-10">
-                    <b>CONTACT</b>
-                    <hr/>
-                    <div className="flex pb-1">
-                        <MdEmail className="text-2xl"/>
-                        <p>: sajal.singhal1@gmail.com</p>
+                <div id = "contact" />
+                <section className="text-2xl flex flex-col items-center py-10">
+                    <h1 className="text-4xl font-bold mb-5">Want to get in touch?</h1>
+                    <div>
+                        <div className="flex">
+                            <BsFillTelephoneFill className="text-2xl" />: +91 982-167-9611
+                        </div>
+                        <div className="flex">
+                            <MdEmail className="text-2xl" />: sajal.singhal1@gmail.com
+                        </div>
+                        <div className="flex">
+                            <ImLocation className="text-2xl" />: Dwarka, New Delhi-75 (India)
+                        </div>
                     </div>
-                    <div className="flex py-1">
-                        <BsFillTelephoneFill className="text-2xl"/>
-                        <p>: +91 982-167-9611</p>
-                    </div>
-                    <div className="flex py-1">
-                        <ImLocation className="text-2xl"/>
-                        <p>: Dwarka, New Delhi-75</p>
-                    </div>
-                    <hr/>
                 </section>
             </main>
-
+            <footer className="mx-auto text-white py-5 bg-slate-800 w-screen flex justify-center">
+                <p>Made by <b>Sajal Singhal</b> (2023)</p>
+            </footer>
         </div>
     )
 }
