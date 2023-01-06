@@ -12,14 +12,13 @@ export default async function handler(
     req: NextApiRequest, 
     res: NextApiResponse<Data>,
 ) {
-    const c = await (client.connect()
+    const c = await client.connect()
     .catch((err) => {
         console.log(err);
         res.status(500).send({
             message: err.toString()
         })
-    }))
-    console.log(c)
+    })
     client.close();
     res.status(200).send({message: "successful"});
 }
