@@ -1,4 +1,4 @@
-import Experience from "./experience";
+import {Experience} from "./homeProps";
 
 function ExpDisplay({ exp }: {
     exp: Experience

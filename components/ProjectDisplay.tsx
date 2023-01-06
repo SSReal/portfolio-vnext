@@ -1,4 +1,4 @@
-import Project from "./project";
+import {Project} from "./homeProps";
 
 function ProjectDisplay({ proj }: {
     proj: Project

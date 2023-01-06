@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Image from "next/image";
+import Image,{StaticImageData} from "next/image";
 import profilePhoto from "../public/profile.jpg";
 
 import { DiReact, DiJavascript1 } from "react-icons/di";
@@ -14,32 +14,91 @@ import { BsFillTelephoneFill } from "react-icons/bs";
 import { ImLocation } from "react-icons/im";
 
 import Link from "next/link";
-import Project from "../components/project";
 import ProjectDisplay from "../components/ProjectDisplay";
 import { NextPageContext } from "next";
 import { useState } from "react";
-import Experience from "../components/experience";
 import ExpDisplay from "../components/ExperienceDisplay";
 
+import HomeProps from "../components/homeProps";
+import sajalSinghal from "../data/sajalSinghal";
 
-function Home({ projects, experience }: { projects: Project[], experience: Experience[] }) {
+
+function getLinkIcon(type: string): JSX.Element {
+    if (type === "github") {
+        return <AiFillGithub />;
+    }
+    else if (type === "linkedin") {
+        return <AiFillLinkedin />;
+    }
+    else if (type === "leetcode") {
+        return <SiLeetcode />;
+    }
+    else if (type === "email") {
+        return <MdEmail />;
+    }
+    else {
+        return <div />;
+    }
+}
+
+function getSkillIcon(text: string): JSX.Element {
+    if (text === "React") {
+        return <DiReact />;
+    }
+    else if (text === "Next.js") {
+        return <TbBrandNextjs />;
+    }
+    else if (text === "Flutter") {
+        return <RiFlutterFill />;
+    }
+    else if (text === "Spring") {
+        return <SiSpring />;
+    }
+    else if (text === "Python") {
+        return <FaPython />;
+    }
+    else if (text === "Javascript") {
+        return <DiJavascript1 />;
+    }
+    else if (text === "C++") {
+        return <SiCplusplus />;
+    }
+    else {
+        return <div />;
+    }
+}
+
+
+function Home({
+    name,
+    shortDesignation,
+    designationLine,
+    links,
+    description,
+    profilePhotoPath,
+    skills,
+    projects,
+    experience,
+    contact,
+}: HomeProps) {
 
     const [menu, setMenu] = useState(false);
     const menuItems = (
         <>
-            <p className=" py-2 px-5 text-2xl hidden md:block"><a href="#intro" ><FaArrowUp /></a></p>
+            <p className=" py-2 px-5 text-2xl"><a href="#intro" ><FaArrowUp /></a></p>
             <p className=" py-2 px-5 text-xl"><a href="#skills" >SKILLS</a></p>
             <p className=" py-2 px-5 text-xl"><a href="#projects" >PROJECTS</a></p>
             <p className=" py-2 px-5 text-xl"><a href="#experience" >EXPERIENCE</a></p>
             {/* <p className=" py-2 px-5 text-xl"><a href="#achievements" >Achievements</a></p> */}
-            <p className=" py-2 px-5 text-xl"><a href="#contact" >CONTACT</a></p>
+            {(contact !== undefined) && <p className=" py-2 px-5 text-xl"><a href="#contact" >CONTACT</a></p>}
         </>
     )
+    console.log(contact);
     return (
         <div>
             <Head>
-                <meta property="description" content="Portfolio of Sajal Singhal" />
-                <title>Sajal Singhal | Developer</title>
+                <meta property="description" content={`Portfolio of ${name}`} />
+                <title>{name} | {shortDesignation}</title>
             </Head>
 
             <main>
@@ -58,28 +117,20 @@ function Home({ projects, experience }: { projects: Project[], experience: Exper
                 <section>
                     <div className="py-10 text-center mx-auto">
                         <div className="w-full mx-auto">
-                            <h1 className="text-5xl pb-2 text-sky-700 font-bold drop-shadow-sm">Sajal Singhal</h1>
-                            <h2 className=" text-xl pb-2">Developer, Designer, CS Enthusiast</h2>
+                            <h1 className="text-5xl pb-2 text-sky-700 font-bold drop-shadow-sm">{name}</h1>
+                            <h2 className=" text-xl pb-2">{designationLine}</h2>
 
                             <div className="flex max-w-xl justify-evenly text-5xl px-10 py-5 mx-auto">
-                                <Link target="_blank" href="https://github.com/SSReal">
-                                    <AiFillGithub />
-                                </Link>
-                                <Link target="_blank" href="https://www.linkedin.com/in/sajalsinghal1/">
-                                    <AiFillLinkedin />
-                                </Link>
-                                <Link target="_blank" href="https://leetcode.com/sajals5031/">
-                                    <SiLeetcode />
-                                </Link>
-                                <Link target="_blank" href="mailto:sajal.singhal1+jobs@gmail.com">
-                                    <MdEmail />
-                                </Link>
+                                {
+                                    links.map(
+                                        (lnk, idx) =>
+                                            <Link key={idx} target="_blank" href={(lnk.type === "email") && `mailto:${lnk.link}` || lnk.link}>{getLinkIcon(lnk.type)}</Link>
+                                    )
+                                }
                             </div>
                         </div>
                         <p className="text-lg leading-5 max-w-lg mx-auto">
-                            {
-                                "Hi! I'm a Web Developer, Designer, ML Scientist based in New Delhi, India. I am a quick learner and can work with a variety of technologies effectively"
-                            }
+                            {description}
                         </p>
                     </div>
                     <div className="mx-auto w-max rounded-full overflow-hidden">
@@ -91,34 +142,14 @@ function Home({ projects, experience }: { projects: Project[], experience: Exper
                 {/* Skills Section */}
                 <div id="skills" />
                 <section className=" w-full my-10 bg-slate-800 overflow:hidden text-sky-300 text-7xl flex justify-center mx-auto py-10 px-20 flex-wrap">
-                    <div className="text-center">
-                        <DiReact />
-                        <p className="text-sm text-white font-semibold" >React</p>
-                    </div>
-                    <div className="text-center">
-                        <TbBrandNextjs />
-                        <p className="text-sm text-white font-semibold" >Next.js</p>
-                    </div>
-                    <div className="text-center">
-                        <RiFlutterFill />
-                        <p className="text-sm text-white font-semibold" >Flutter</p>
-                    </div>
-                    <div className="text-center">
-                        <SiSpring className="py-2" />
-                        <p className="text-sm text-white font-semibold" >Spring</p>
-                    </div>
-                    <div className="text-center">
-                        <FaPython />
-                        <p className="text-sm text-white font-semibold" >Python</p>
-                    </div>
-                    <div className="text-center">
-                        <DiJavascript1 />
-                        <p className="text-sm text-white font-semibold" >Javascript</p>
-                    </div>
-                    <div className="text-center">
-                        <SiCplusplus className="py-2" />
-                        <p className="text-sm text-white font-semibold" >C++</p>
-                    </div>
+                    {
+                        skills.map((text, idx) =>
+                            <div key={idx} className="text-center">
+                                {getSkillIcon(text)}
+                                <p className="text-sm text-white font-semibold" >{text}</p>
+                            </div>
+                        )
+                    }
                 </section>
 
                 {/* Projects Section */}
@@ -146,21 +177,30 @@ function Home({ projects, experience }: { projects: Project[], experience: Exper
                 </section>
 
                 {/* Contact Section */}
-                <div id = "contact" />
-                <section className="text-2xl flex flex-col items-center py-10">
-                    <h1 className="text-4xl font-bold mb-5">Want to get in touch?</h1>
-                    <div>
-                        <div className="flex">
-                            <BsFillTelephoneFill className="text-2xl" />: +91 982-167-9611
+                <div id="contact" />
+                {
+                    (contact !== undefined) &&
+                    <section className="text-2xl flex flex-col items-center py-10">
+                        <h1 className="text-4xl font-bold mb-5">Want to get in touch?</h1>
+                        <div>
+                            {(contact.phone !== undefined) &&
+                                <div className="flex items-center">
+                                    <BsFillTelephoneFill className="text-2xl" />: {contact.phone}
+                                </div>
+                            }
+                            {(contact.email !== undefined) &&
+                                <div className="flex items-center">
+                                    <MdEmail className="text-2xl" />: {contact.email}
+                                </div>
+                            }
+                            {(contact.location !== undefined) &&
+                                <div className="flex items-center">
+                                    <ImLocation className="text-2xl" />: {contact.location}
+                                </div>
+                            }
                         </div>
-                        <div className="flex">
-                            <MdEmail className="text-2xl" />: sajal.singhal1@gmail.com
-                        </div>
-                        <div className="flex">
-                            <ImLocation className="text-2xl" />: Dwarka, New Delhi-75 (India)
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                }
             </main>
             <footer className="mx-auto text-white py-5 bg-slate-800 w-screen flex justify-center">
                 <p>Made by <b>Sajal Singhal</b> (2023)</p>
@@ -173,56 +213,6 @@ export default Home;
 
 export async function getStaticProps(context: NextPageContext) {
     return {
-        props: {
-            projects: [
-                {
-                    title: "Chat-app",
-                    description: "A common chat-room where users can log in with Google and share their ideas. Features auto-scroll feature with dynamic updates when new messages come. Technologies used: Firebase, React",
-                    dateRange: "Jan 2023",
-                    githubLink: "https://github.com/SSReal/chat-app",
-                    demoLink: "https://chats-f2480.web.app",
-                },
-                {
-                    title: "SimpleSim",
-                    description: "A simple(r) Discrete Event Simulation Framework, written in Python",
-                    dateRange: "Oct 2022",
-                    githubLink: "https://github.com/SSReal/SimpleSim",
-                },
-                {
-                    title: "सक्षम (Saksham)",
-                    description: "An app to facilitate the inner workings of the Dept. of Financial Services (DFS), Ministry of Finance, allowing the various employees to contact their superiors regarding issues, or broadcast notices to juniors. Also it has a separate tab in which the various notices published to the public are displayed. Developed as part of Smart India Hackathon'22 in a team of 6 within 36 hours.",
-                    dateRange: "Aug 2023",
-                    // githubLink: "https://github.com/SSReal/financial-alert-app_bhagwan_bharose",
-                    demoLink: "https://drive.google.com/file/d/1-CxlGSzKVOj-lwUePQnYbdqEC-woS3w7"
-                },
-                {
-                    title: "Chat-App-Backend",
-                    description: "A sample REST API which has support for multiple users each with some pages, each of which can contain views which can be password-protected. Can be abstracted by an application to implement a page-view based data structure",
-                    dateRange: "March 2022",
-                    githubLink: "https://github.com/SSReal/chat-app-backend",
-                },
-                {
-                    title: "Me-Site",
-                    description: "A Microblogging Platform created in the MERN stack. Users can log in with Google or Email, follow others or be followed by other people, post things they love, all on a simple interface.",
-                    dateRange: "May-June 2021",
-                    githubLink: "https://github.com/SSReal/me-site"
-                },
-                {
-                    title: "Ano-Note",
-                    description: "An anonymous note-taking app with note editing and deleting features. (MERN Stack)",
-                    dateRange: "April-May 2021",
-                    githubLink: "https://github.com/SSReal/ano-note",
-                    demoLink: "https://ano-note.herokuapp.com/"
-                },
-            ],
-            experience: [
-                {
-                    title: "SWE Intern",
-                    company: "Cure.Fit Healthcare Pvt. Ltd.",
-                    description: "Designed a standalone app for a vertical of the company. Created several API end-points and business logic to retrieve and display data on the app. Technologies used: Flutter, Java (Spring Boot), TypeScript",
-                    dateRange: "May-July 2022"
-                }
-            ],
-        }
+        props: sajalSinghal
     }
 }
