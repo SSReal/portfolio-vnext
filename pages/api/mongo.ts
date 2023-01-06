@@ -12,7 +12,6 @@ export default async function handler(
     req: NextApiRequest, 
     res: NextApiResponse<Data>,
 ) {
-    console.log(URI);
     const c = await client.connect()
     .catch((err) => {
         console.log(err);
@@ -20,6 +19,7 @@ export default async function handler(
             message: err.toString()
         })
     })
+    console.log(c)
     client.close();
     res.status(200).send({message: "successful"});
 }
