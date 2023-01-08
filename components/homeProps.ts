@@ -43,5 +43,5 @@ interface HomeProps {
 
 export default HomeProps;
 
-export type {Project, Experience};
+export type {Project, Experience, Contact};
 

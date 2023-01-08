@@ -16,3 +16,26 @@ html {
     scrollbar-width: none;
 }
 
+input {
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+select {
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+button {
+    border: 1px solid darkgrey;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+button:hover {
+    transform: scale(1.05);
+    transition: all;
+    background-image: linear-gradient(rgb(0 0 0/5%) 0 0);
+}

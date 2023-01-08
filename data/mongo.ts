@@ -1,4 +1,5 @@
 import { Document, FindOptions, MongoClient, ServerApiVersion } from "mongodb";
+import HomeProps from "../components/homeProps";
 
 const URI = `mongodb+srv://sajal:${process.env.MONGO_PASSWORD}@portfolio-data-1.prqrq3y.mongodb.net/?retryWrites=true&w=majority`
 const client = new MongoClient(URI);
@@ -45,6 +46,13 @@ async function findUsernames() {
     return allDocs.map((d)=>d.username);
 }
 
+async function addUser(doc:Object) {
+    return await coll.insertOne(doc)
+            .catch((err) => {
+                throw err;
+            });
+}
+
 export default client;
-export { connect, close, db, coll, findOne, find, findUsernames};
+export { connect, close, db, coll, findOne, find, findUsernames, addUser};
 
