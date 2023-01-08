@@ -29,7 +29,7 @@ interface Contact {
 interface HomeProps {
     name: string, 
     username: string,
-    // _id: ObjectId,
+    _id?: ObjectId,
     shortDesignation: string,
     designationLine: string,
     links: Link[],

@@ -2,8 +2,17 @@ import { GetStaticPropsContext} from "next";
 import HomeProps from "../components/homeProps";
 import Home from "./index";
 import {db, coll, findOne, findUsernames} from "../data/mongo";
+import { useRouter } from "next/router";
 
 function ProfileHome(profile: HomeProps) {
+    const router = useRouter();
+    if(router.isFallback) {
+        return <h1 className = "text-3xl"> Loading </h1>
+    }
+    if(profile._id === null) {
+        //user not found
+        return <h1 className = "text-3xl">User not found</h1>
+    }
     return <Home {...profile} />
 }
 
@@ -19,7 +28,7 @@ export async function getStaticPaths() {
                 }
             }
         }),
-        fallback: false,
+        fallback: true,
     }
 };
 

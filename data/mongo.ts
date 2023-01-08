@@ -29,6 +29,11 @@ async function find(doc: Document, options?: FindOptions<Document>) {
 
 async function findOne(doc: Document, options?: FindOptions<Document>) {
     const foundDoc = await coll.findOne(doc, options)
+    if(foundDoc === null) {
+        return {
+            _id: null
+        }
+    }
     return {
         ...foundDoc,
         _id: foundDoc?._id.toString(),
