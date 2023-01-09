@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import HomeProps, { Contact, Experience, Project } from "../components/homeProps";
 
@@ -89,6 +90,22 @@ function Register() {
             method: "POST",
             body: JSON.stringify(finalData)
         })
+
+        if(res.status === 403) {
+            //user already exists
+            alert("This username already exists, please use another one");
+            return;
+        }
+        else if(res.status !== 200) {
+            //some error
+            alert("Something went wrong, please check the input and try again some time later");
+            return;
+        }
+        else {
+            //ok
+            alert(`User ${finalData.username} created successfully, redirecting to your portfolio`);
+            router.push(`/../${finalData.username}`)
+        }
 
         //reset data
         setRegData(defaultRegData);
@@ -225,6 +242,8 @@ function Register() {
     const [newSkill, setNewSkill] = useState("select");
     const [newProject, setNewProject] = useState(defaultProject);
     const [newExp, setNewExp] = useState(defaultExp);
+
+    const router = useRouter();
 
     function addSocialLink() {
         if (newSocialLink === "") {
