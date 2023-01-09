@@ -22,6 +22,16 @@ input {
     margin: 5px;
 }
 
+.reveal-from-right:hover {
+    transform: translateX(0px);
+    transition: 0.25s 0s all cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.reveal-from-right {
+    transform: translateX(60px);
+    transition: 0.25s 0s all cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
 select {
     border: 1px solid grey;
     border-radius: 5px;
