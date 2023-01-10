@@ -2,20 +2,20 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
-import HomeProps, { Contact, Experience, Project } from "../components/homeProps";
-import profilePhoto from "../public/profile.jpg";
+import { useEffect, useRef, useState } from "react";
+import HomeProps, { Contact, Experience, Project } from "../../components/homeProps";
+import profilePhoto from "../../public/profile.jpg";
 
-import { getLinkIcon, getSkillIcon } from "../data/utils";
+import { getLinkIcon, getSkillIcon } from "../../data/utils";
 import { AiFillDelete } from "react-icons/ai";
 import { CgScrollH } from "react-icons/cg";
-import ProjectDisplay from "../components/ProjectDisplay";
-import ExpDisplay from "../components/ExperienceDisplay";
+import ProjectDisplay from "../../components/ProjectDisplay";
+import ExpDisplay from "../../components/ExperienceDisplay";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { MdCheckCircle, MdEmail } from "react-icons/md";
 import { ImLocation } from "react-icons/im";
 
-import loader from "../public/loader.gif";
+import loader from "../../public/loader.gif";
 
 const defaultProject: Project = {
     title: "",
@@ -269,6 +269,16 @@ function Register() {
     const [newExp, setNewExp] = useState(defaultExp);
 
     const router = useRouter();
+
+    useEffect(() => {
+        if(router.query.params?.length === 1) {
+            //username given
+            setRegData((reg) => {return {
+                ...reg,
+                username: router.query.params && router.query.params[0] || ""
+            }})
+        }
+    }, [router.query.params])
 
     function addSocialLink() {
         if (newSocialLink === "") {
