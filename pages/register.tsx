@@ -12,8 +12,10 @@ import { CgScrollH } from "react-icons/cg";
 import ProjectDisplay from "../components/ProjectDisplay";
 import ExpDisplay from "../components/ExperienceDisplay";
 import { BsFillTelephoneFill } from "react-icons/bs";
-import { MdCheckCircle, MdDoneAll, MdEmail } from "react-icons/md";
+import { MdCheckCircle, MdEmail } from "react-icons/md";
 import { ImLocation } from "react-icons/im";
+
+import loader from "../public/loader.gif";
 
 const defaultProject: Project = {
     title: "",
@@ -55,26 +57,32 @@ function showAlert(q: string) {
 
 function Register() {
     async function submitFormHandler(e: any) {
+        setIsLoading(true);
         const finalData = regData;
 
         if (regData.name === "") {
             showAlert("Name");
+            setIsLoading(false);
             return;
         }
         else if (regData.username === "") {
             showAlert("Username");
+            setIsLoading(false);
             return;
         }
         else if (regData.shortDesignation === "") {
             showAlert("Short Designation");
+            setIsLoading(false);
             return;
         }
         else if (regData.designationLine === "") {
             showAlert("Designation Line");
+            setIsLoading(false);
             return;
         }
         else if (regData.description === "") {
             showAlert("Description");
+            setIsLoading(false);
             return;
         }
 
@@ -106,23 +114,21 @@ function Register() {
         if (res.status === 403) {
             //user already exists
             alert("This username already exists, please use another one");
+            setIsLoading(false);
             return;
         }
         else if (res.status !== 200) {
             //some error
             alert("Something went wrong, please check the input and try again some time later");
+            setIsLoading(false);
             return;
         }
         else {
             //ok
             alert(`User ${finalData.username} created successfully, redirecting to your portfolio`);
-            router.push(`/../${finalData.username}`)
+            await router.push(`/../${finalData.username}`);
+            setIsLoading(false);
         }
-
-        //reset data
-        setRegData(defaultRegData);
-        setNewSocialLink("");
-        setSocialType("");
     }
 
     function auto_height(e: any) {
@@ -384,8 +390,16 @@ function Register() {
         })
     }
 
+    const [isLoading, setIsLoading] = useState(false);
+
     return (
         <div>
+            {
+                (isLoading) &&
+                <div className="fixed bg-opacity-40 bg-slate-600 font-semibold w-screen h-screen flex items-center">
+                    <Image className="mx-auto opacity-60" src={loader} alt="loading" />
+                </div>
+            }
             {(regData.name !== "" && regData.shortDesignation !== "") &&
                 (<Head>
                     <meta property="description" content={`Portfolio of ${regData.name}`} />
@@ -399,7 +413,7 @@ function Register() {
                 <div>
                     <label htmlFor="username">Username:</label>
                     <input name="username" type="text" onChange={onChangeHandler} value={regData.username} />
-                    <br/>
+                    <br />
                     <label htmlFor="shortDesignation">Short Designation Line</label>
                     <input name="shortDesignation" onChange={onChangeHandler} value={regData.shortDesignation} />
                     <section>
@@ -580,9 +594,9 @@ function Register() {
                         </section>
                     }
 
-                    <div onClick={submitFormHandler} className = " reveal-from-right flex items-center fixed top-10 right-0 bg-slate-700 rounded-tl-lg rounded-bl-lg cursor-pointer">
-                        <MdCheckCircle className=" py-2 text-5xl text-sky-500"/>
-                        <p className = "text-white mr-2">Submit</p>
+                    <div onClick={submitFormHandler} className=" reveal-from-right flex items-center fixed top-10 right-0 bg-slate-700 rounded-tl-lg rounded-bl-lg cursor-pointer">
+                        <MdCheckCircle className=" py-2 text-5xl text-sky-500" />
+                        <p className="text-white mr-2">Submit</p>
                     </div>
                 </div>
             </main>
