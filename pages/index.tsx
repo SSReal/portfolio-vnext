@@ -11,16 +11,20 @@ import { ImLocation } from "react-icons/im";
 import Link from "next/link";
 import ProjectDisplay from "../components/ProjectDisplay";
 import { NextPageContext } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ExpDisplay from "../components/ExperienceDisplay";
 
 import HomeProps from "../components/homeProps";
-import sajalSinghal from "../data/sajalSinghal";
 
 import {getLinkIcon, getSkillIcon} from "../data/utils";
+import { useRouter } from "next/router";
+
+import defaultUsername from "../data/default_username";
+import { findOne } from "../data/mongo";
 
 
 function Home({
+    username,
     name,
     shortDesignation,
     designationLine,
@@ -31,7 +35,7 @@ function Home({
     projects,
     experience,
     contact,
-}: HomeProps) {
+}: HomeProps) {    
 
     const [menu, setMenu] = useState(false);
     const menuItems = (
@@ -162,7 +166,8 @@ function Home({
 export default Home;
 
 export async function getStaticProps(context: NextPageContext) {
+    const defaultDoc = await findOne({username: defaultUsername});
     return {
-        props: sajalSinghal
+        props: defaultDoc
     }
 }

@@ -1,11 +1,10 @@
 import { GetStaticPropsContext } from "next";
 import HomeProps from "../components/homeProps";
-import Home from "./index";
+import Home from ".";
 import { db, coll, findOne, findUsernames } from "../data/mongo";
 import { useRouter } from "next/router";
 import loader from "../public/loader.gif";
 import Image from "next/image";
-import { AiOutlineLoading } from "react-icons/ai";
 import { FaUserSlash } from "react-icons/fa";
 import Link from "next/link";
 
