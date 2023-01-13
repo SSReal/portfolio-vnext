@@ -372,15 +372,19 @@ function Register() {
     function addExp() {
         if (newExp.title === "") {
             alert("Please enter title!");
+            return;
         }
         else if (newExp.company === "") {
             alert("Please enter company!");
+            return;
         }
         else if (newExp.description === "") {
             alert("Please enter description!");
+            return;
         }
         else if (newExp.dateRange === "") {
             alert("Please enter dateRange!");
+            return;
         }
 
         setRegData({
