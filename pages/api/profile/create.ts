@@ -25,7 +25,12 @@ export default async function handler(
     }
     
     const result = await addUser(doc)
-                .catch((err) => res.status(500).send(err));
-    res.status(200).send(result);
+                .catch((err) => {
+                    res.status(500).send(err);
+                    throw err;
+                });
+               
+    await res.revalidate(`/${doc.username}`)
+    return res.status(200).send(result);
 
 }

@@ -127,8 +127,10 @@ function Register() {
         else {
             //ok
             alert(`User ${finalData.username} created successfully, redirecting to your portfolio`);
-            await router.push(`/../${finalData.username}`);
             setIsLoading(false);
+            await router.push(`/${finalData.username}`, undefined, {
+                unstable_skipClientCache: true //for loading new page, not old "not found"
+            });
         }
     }
 
