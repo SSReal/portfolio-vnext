@@ -31,7 +31,6 @@ export default async function handler(
                 });
                
     await res.revalidate(`/${doc.username}`)
-    console.log('done');
     return res.status(200).send(result);
 
 }
