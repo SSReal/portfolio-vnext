@@ -93,6 +93,7 @@ function Register() {
             }
             else if (finalData.contact.email === "") {
                 alert("Email is mandatory for contact section, otherwise remove all entries from contact section");
+                setIsLoading(false);
                 return;
             }
             else {
