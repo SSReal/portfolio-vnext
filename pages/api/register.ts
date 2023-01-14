@@ -12,4 +12,5 @@ export default async function handler(
     res.status(201).send({
         message: "created successfully"
     })
+    await res.revalidate(`/${username}`);
 }
