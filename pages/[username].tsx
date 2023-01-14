@@ -22,9 +22,20 @@ function ProfileHome(profile: HomeProps) {
         <div className = "fixed w-screen h-screen flex flex-col items-center justify-center">
             <FaUserSlash className = "text-9xl"/>
             <p className = "text-6xl font-bold max-w-md text-center">User {router.query.username} doesn{"'"}t exist</p>
-            <Link className = "text-3xl my-10 p-5 rounded-md border-2 hover:bg-slate-100 hover:bg-opacity-50" href = {`/register/${router.query.username}`}>Create</Link>
+            <Link className = "text-3xl my-10 p-5 rounded-md border-2 hover:bg-slate-100 hover:bg-opacity-50" href = {'/register'}>Create</Link>
         </div>
         )
+    }
+    else if(profile.name === undefined) {
+        //profile not yet implemented
+        return (
+            <div className = "fixed w-screen h-screen flex flex-col items-center justify-center">
+                <FaUserSlash className = "text-9xl"/>
+                <p className = "text-3xl font-bold max-w-md text-center">Portfolio for {router.query.username} has not been implemented yet.</p>
+                <p className = "text-xl py-5">Log in as {router.query.username} and visit Edit page to implement it</p>
+                <Link className = "text-3xl my-10 p-5 rounded-md border-2 hover:bg-slate-100 hover:bg-opacity-50" href = {'/edit'}>Edit</Link>
+            </div>
+            )
     }
     return <Home {...profile} />
 }

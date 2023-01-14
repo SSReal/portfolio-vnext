@@ -3,19 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import HomeProps, { Contact, Experience, Project } from "../../components/homeProps";
-import profilePhoto from "../../public/profile.jpg";
+import HomeProps, { Contact, Experience, Project } from "../components/homeProps";
+import profilePhoto from "../public/profile.jpg";
 
-import { getLinkIcon, getSkillIcon } from "../../data/utils";
+import { getLinkIcon, getSkillIcon } from "../data/utils";
 import { AiFillDelete } from "react-icons/ai";
 import { CgScrollH } from "react-icons/cg";
-import ProjectDisplay from "../../components/ProjectDisplay";
-import ExpDisplay from "../../components/ExperienceDisplay";
+import ProjectDisplay from "../components/ProjectDisplay";
+import ExpDisplay from "../components/ExperienceDisplay";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { MdCheckCircle, MdEmail } from "react-icons/md";
 import { ImLocation } from "react-icons/im";
 
-import loader from "../../public/loader.gif";
+import loader from "../public/loader.gif";
 
 const defaultProject: Project = {
     title: "",
@@ -55,7 +55,7 @@ function showAlert(q: string) {
     alert(`${q} is mandatory, please enter it!`);
 }
 
-function Register() {
+function Edit() {
     async function submitFormHandler(e: any) {
         setIsLoading(true);
         const finalData = regData;
@@ -107,9 +107,13 @@ function Register() {
         }
         const userStr = JSON.stringify(finalData)
         console.log(userStr);
-        const res = await fetch('/api/profile/create', {
+        const token = localStorage.getItem('userToken');
+        const res = await fetch('/api/profile/edit', {
             method: "POST",
-            body: JSON.stringify(finalData)
+            body: JSON.stringify(finalData),
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
 
         if (res.status === 403) {
@@ -126,7 +130,7 @@ function Register() {
         }
         else {
             //ok
-            alert(`User ${finalData.username} created successfully, redirecting to your portfolio`);
+            alert(`Portfolio for ${finalData.username} updated successfully, redirecting`);
             setIsLoading(false);
             await router.push(`/${finalData.username}`, undefined, {
                 unstable_skipClientCache: true //for loading new page, not old "not found"
@@ -147,12 +151,13 @@ function Register() {
                 name: e.target.value
             })
         }
-        else if (e.target.name === "username") {
-            setRegData({
-                ...regData,
-                username: e.target.value
-            })
-        }
+        //disable changing the username now
+        // else if (e.target.name === "username") {
+        //     setRegData({
+        //         ...regData,
+        //         username: e.target.value
+        //     })
+        // }
         else if (e.target.name === "shortDesignation") {
             setRegData({
                 ...regData,
@@ -274,14 +279,35 @@ function Register() {
     const router = useRouter();
 
     useEffect(() => {
-        if(router.query.params?.length === 1) {
-            //username given
-            setRegData((reg) => {return {
-                ...reg,
-                username: router.query.params && router.query.params[0] || ""
-            }})
+        const verifyLogin = async () => {
+            const token = localStorage.getItem('userToken');
+            const username = localStorage.getItem('loggedInUser');
+            if (token === null) {
+                console.log("no token");
+                router.push('/login');
+            }
+            else {
+                console.log("token is " + token);
+                const userDoc = await (await fetch('/api/profile', {
+                    method: "POST",
+                    body: JSON.stringify({
+                        username: username
+                    }),
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })).json();
+                console.log(userDoc);
+                setRegData((regData) => {
+                    return {
+                        ...regData,
+                        ...userDoc
+                    };
+                });
+            }
         }
-    }, [router.query.params])
+        verifyLogin();
+    }, [router])
 
     function addSocialLink() {
         if (newSocialLink === "") {
@@ -621,4 +647,8 @@ function Register() {
     )
 }
 
-export default Register;
+export default Edit;
+
+export function getClientSideProps() {
+
+}

@@ -1,4 +1,4 @@
-import { Document, FindOptions, MongoClient, ServerApiVersion } from "mongodb";
+import { Document, FindOptions, MongoClient, ObjectId, ServerApiVersion } from "mongodb";
 import HomeProps from "../components/homeProps";
 
 const URI = `mongodb+srv://sajal:${process.env.MONGO_PASSWORD}@portfolio-data-1.prqrq3y.mongodb.net/?retryWrites=true&w=majority`
@@ -28,11 +28,27 @@ async function find(doc: Document, options?: FindOptions<Document>) {
     })
 }
 
+async function findById(id:string) {
+    const doc = await findOne({_id: new ObjectId(id)});
+    return doc;
+}
+
+async function updateById(doc:any) {
+    const {_id, ...updateDoc} = doc;
+    console.log("start updating");
+    console.log(new ObjectId(_id));
+    console.log(updateDoc);
+    const res = await coll.replaceOne({_id:new ObjectId(_id)}, updateDoc);
+    console.log("done");
+    return res;
+}
+
 async function findOne(doc: Document, options?: FindOptions<Document>) {
     const foundDoc = await coll.findOne(doc, options)
     if(foundDoc === null) {
         return {
-            _id: null
+            _id: null,
+            hashedPassword: null
         }
     }
     return {
@@ -54,5 +70,5 @@ async function addUser(doc:Object) {
 }
 
 export default client;
-export { connect, close, db, coll, findOne, find, findUsernames, addUser};
+export { connect, close, db, coll, findOne, find, findUsernames, addUser, findById, updateById};
 
