@@ -133,10 +133,10 @@ function Edit() {
         else {
             //ok
             alert(`Portfolio for ${finalData.username} updated successfully, redirecting`);
-            setIsLoading(false);
             await router.push(`/${finalData.username}`, undefined, {
                 unstable_skipClientCache: true //for loading new page, not old "not found"
             });
+            setIsLoading(false);
         }
     }
 
@@ -285,11 +285,9 @@ function Edit() {
             const token = localStorage.getItem('userToken');
             const username = localStorage.getItem('loggedInUser');
             if (token === null) {
-                console.log("no token");
                 router.push('/login');
             }
             else {
-                console.log("token is " + token);
                 const userDoc = await (await fetch('/api/profile', {
                     method: "POST",
                     body: JSON.stringify({
@@ -392,8 +390,8 @@ function Edit() {
         setRegData({
             ...regData,
             projects: [
+                proj,
                 ...regData.projects,
-                proj
             ]
         })
         setNewProject(defaultProject);
@@ -427,8 +425,8 @@ function Edit() {
         setRegData({
             ...regData,
             experience: [
+                newExp,
                 ...regData.experience,
-                newExp
             ]
         })
         setNewExp(defaultExp);
