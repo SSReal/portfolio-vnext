@@ -151,12 +151,13 @@ function Edit() {
                 name: e.target.value
             })
         }
-        else if (e.target.name === "username") {
-            setRegData({
-                ...regData,
-                username: e.target.value
-            })
-        }
+        //disable changing the username now
+        // else if (e.target.name === "username") {
+        //     setRegData({
+        //         ...regData,
+        //         username: e.target.value
+        //     })
+        // }
         else if (e.target.name === "shortDesignation") {
             setRegData({
                 ...regData,
