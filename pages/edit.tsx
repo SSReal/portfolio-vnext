@@ -556,12 +556,12 @@ function Edit() {
                         <br />
                         <button onClick={addProject}>Add Project</button>
                         <br />
-                        <div className="hide-scrollbar flex overflow-x-scroll items-stretch">
+                        <div className="md:w-full hide-scrollbar flex overflow-x-scroll items-stretch">
                             {
                                 (regData.projects.length > 0)
                                 &&
                                 regData.projects.map((proj, idx) =>
-                                    <div key={idx}>
+                                    <div key={idx} className = "flex items-stretch min-w-max">
                                         <AiFillDelete className="text-red-500 relative top-10 right-5 z-10 text-lg float-right cursor-pointer" onClick={() => deleteProject(idx)} />
                                         <ProjectDisplay key={idx} proj={proj} />
                                     </div>
