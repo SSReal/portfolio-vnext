@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { addUser, findById, findOne, updateById } from "../../../data/mongo";
 import jwt from "jsonwebtoken";
+import defaultUsername from "../../../data/default_username";
 
 export default async function handler(
     req: NextApiRequest,
@@ -36,6 +37,7 @@ export default async function handler(
         }).catch((err) => res.status(500).send(err));
 
         await res.revalidate(`/${username}`)
+        if(username === defaultUsername) await res.revalidate('/') //revalidate the home page as well
         res.status(200).send(updateRes);
 
     }
