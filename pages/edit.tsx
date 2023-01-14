@@ -288,7 +288,7 @@ function Edit() {
             }
             else {
                 console.log("token is " + token);
-                const userDoc = await (await fetch('/api/profile/s', {
+                const userDoc = await (await fetch('/api/profile', {
                     method: "POST",
                     body: JSON.stringify({
                         username: username

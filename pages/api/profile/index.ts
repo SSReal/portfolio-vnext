@@ -20,7 +20,6 @@ export default async function handler(
         console.log(decodedToken);
         console.log(username);
         if(decodedToken.username !== username) {
-            console.log("e1");
             throw "invalid token";
         }
         const {hashedPassword: _, ...userDoc} = await findById(decodedToken.userId);
