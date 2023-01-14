@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 
 
@@ -29,6 +30,7 @@ function Register() {
         }
     }
 
+    const router = useRouter();
     async function regUser() {
 
         const res1 = await fetch('/api/find', {
@@ -57,6 +59,10 @@ function Register() {
         })
 
         console.log(res2);
+        if(res2.status === 201) {
+            alert("Registered successfully");
+            await router.push('/login');
+        }
         setRegDetails({username:"", password:"", cpassword: ""})
 
     }

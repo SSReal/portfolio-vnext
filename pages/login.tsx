@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 
@@ -20,6 +21,8 @@ function Login() {
         }
     }
 
+    const router = useRouter();
+
     async function login() {
         const res = await fetch('/api/login', {
             method: "POST", 
@@ -37,6 +40,9 @@ function Login() {
 
         localStorage.setItem("userToken", token);
         localStorage.setItem("loggedInUser", username);
+
+        alert(`Successfully logged in as ${username}`)
+        await router.push('/edit');
 
         setRegDetails({
             username:"",
