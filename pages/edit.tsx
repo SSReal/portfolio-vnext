@@ -12,10 +12,11 @@ import { CgScrollH } from "react-icons/cg";
 import ProjectDisplay from "../components/ProjectDisplay";
 import ExpDisplay from "../components/ExperienceDisplay";
 import { BsFillTelephoneFill } from "react-icons/bs";
-import { MdCheckCircle, MdEmail } from "react-icons/md";
+import { MdCheckCircle, MdEmail, MdLogout } from "react-icons/md";
 import { ImLocation } from "react-icons/im";
 
 import loader from "../public/loader.gif";
+import { FaSignOutAlt } from "react-icons/fa";
 
 const defaultProject: Project = {
     title: "",
@@ -56,6 +57,7 @@ function showAlert(q: string) {
 }
 
 function Edit() {
+
     async function submitFormHandler(e: any) {
         setIsLoading(true);
         const finalData = regData;
@@ -308,6 +310,12 @@ function Edit() {
         }
         verifyLogin();
     }, [router])
+
+    async function logout() {
+        localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('userToken');
+        await router.push('/login');
+    }
 
     function addSocialLink() {
         if (newSocialLink === "") {
@@ -637,9 +645,15 @@ function Edit() {
                         </section>
                     }
 
-                    <div onClick={submitFormHandler} className=" reveal-from-right flex items-center fixed top-10 right-0 bg-slate-700 rounded-tl-lg rounded-bl-lg cursor-pointer">
-                        <MdCheckCircle className=" py-2 text-5xl text-sky-500" />
-                        <p className="text-white mr-2">Submit</p>
+                    <div className = "fixed top-10 right-0 flex flex-col gap-2">
+                        <div onClick={submitFormHandler} className=" reveal-from-right flex items-center bg-slate-700 rounded-tl-lg rounded-bl-lg cursor-pointer">
+                            <MdCheckCircle className=" py-2 text-5xl text-sky-500" />
+                            <p className="text-white mr-2">Submit</p>
+                        </div>
+                        <div onClick = {logout} className = " reveal-from-right flex items-center bg-slate-700 rounded-tl-lg rounded-bl-lg cursor-pointer">
+                            <FaSignOutAlt className = "py-2 text-5xl text-sky-500" />
+                            <p className = "text-white mr-2">Logout</p>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -648,7 +662,3 @@ function Edit() {
 }
 
 export default Edit;
-
-export function getClientSideProps() {
-
-}

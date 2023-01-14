@@ -1,10 +1,33 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 function Login() {
     const [{username, password}, setRegDetails] = useState({username:"", password:""})
+    const [loggedInUser, setLoggedInUser] = useState("");
+    const router = useRouter();
+
+    useEffect(() => {
+        setLoggedInUser(localStorage.getItem('loggedInUser') || "")
+    }, [])
+
+    function logout() {
+        localStorage.removeItem('userToken');
+        localStorage.removeItem('loggedInUser');
+        setLoggedInUser("");
+    }
+
+    if(loggedInUser !== "") {
+        //a user is already logged in
+        //display logout button
+        return (
+            <div className = "flex flex-col items-center justify-center h-screen w-screen">
+                <p>Already logged in as {loggedInUser}</p>
+                <button onClick = {logout}>Log out</button>
+            </div>
+        )
+    }
     
     function changeHandler(e:any) {
         if(e.target.name === "username") {
@@ -20,8 +43,6 @@ function Login() {
             })
         }
     }
-
-    const router = useRouter();
 
     async function login() {
         const res = await fetch('/api/login', {
