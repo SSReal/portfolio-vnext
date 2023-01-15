@@ -441,6 +441,33 @@ function Edit() {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const skillDragRef:any = useRef(null);
+    const skillDragOverRef:any = useRef(null);
+    
+    function skillDragStart(e:any, pos:number) {
+        skillDragRef.current = pos;
+    }
+
+    function skillDragEnter(e:any, pos:number) {
+        e.preventDefault();
+        skillDragOverRef.current = pos;
+        const newSkills = [...regData.skills];
+        const content = newSkills[skillDragRef.current];
+        newSkills.splice(skillDragRef.current, 1);
+        newSkills.splice(skillDragOverRef.current, 0, content);
+        skillDragRef.current = skillDragOverRef.current
+        
+        setRegData({
+            ...regData,
+            skills: newSkills
+        })
+    }
+
+    function skillDrop(e:any) {
+        skillDragRef.current = null;
+        skillDragOverRef.current = null;
+    }
+
     return (
         <div>
             {
@@ -525,7 +552,7 @@ function Edit() {
                             (regData.skills.length > 0)
                             &&
                             regData.skills.map((text, idx) =>
-                                <div key={idx} className="text-center mx-2 my-2">
+                                <div key={idx} className="text-center mx-2 my-2" draggable onDragStart={(e) => skillDragStart(e, idx)} onDragEnter={(e) => skillDragEnter(e, idx)} onDrop = {skillDrop} >
                                     <AiFillDelete className="text-red-500 text-lg relative left-12 top-5 cursor-pointer" onClick={() => deleteSkill(idx)} />
                                     {getSkillIcon(text)}
                                     <p className="text-sm text-white font-semibold" >{text}</p>
