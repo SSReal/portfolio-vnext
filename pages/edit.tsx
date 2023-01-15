@@ -562,8 +562,8 @@ function Edit() {
                                 &&
                                 regData.projects.map((proj, idx) =>
                                     <div key={idx} className = "flex items-stretch min-w-max">
-                                        <AiFillDelete className="text-red-500 relative top-10 right-5 z-10 text-lg float-right cursor-pointer" onClick={() => deleteProject(idx)} />
                                         <ProjectDisplay key={idx} proj={proj} />
+                                        <AiFillDelete className="text-red-500 relative top-12 right-12 z-10 text-lg float-right cursor-pointer" onClick={() => deleteProject(idx)} />
                                     </div>
                                 )
                                 ||
@@ -598,9 +598,9 @@ function Edit() {
                                 (regData.experience.length > 0)
                                 &&
                                 regData.experience.map((exp, idx) =>
-                                    <div key={idx}>
-                                        <AiFillDelete className="text-red-500 relative top-10 right-5 z-10 text-lg float-right cursor-pointer" onClick={() => deleteExp(idx)} />
+                                    <div key={idx} className = "flex items-stretch min-w-max">
                                         <ExpDisplay key={idx} exp={exp} />
+                                        <AiFillDelete className="text-red-500 relative top-12 right-12 z-10 text-lg cursor-pointer" onClick={() => deleteExp(idx)} />
                                     </div>
                                 )
                                 ||
