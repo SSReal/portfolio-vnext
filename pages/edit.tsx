@@ -450,6 +450,7 @@ function Edit() {
 
     function skillDragEnter(e:any, pos:number) {
         e.preventDefault();
+        if(skillDragRef.current === null) return;
         skillDragOverRef.current = pos;
         const newSkills = [...regData.skills];
         const content = newSkills[skillDragRef.current];
@@ -466,6 +467,35 @@ function Edit() {
     function skillDrop(e:any) {
         skillDragRef.current = null;
         skillDragOverRef.current = null;
+    }
+
+    const projDragRef:any = useRef(null);
+    const projDragOverRef:any = useRef(null);
+
+    function projDragStart(e:any, pos:number) {
+        projDragRef.current = pos;
+    }
+
+    function projDragEnter(e:any, pos:number) {
+        e.preventDefault();
+        if(projDragRef.current === null) return;
+        projDragOverRef.current = pos;
+        const newProjs = [...regData.projects];
+        const content = newProjs[projDragRef.current];
+        newProjs.splice(projDragRef.current, 1);
+        newProjs.splice(projDragOverRef.current, 0, content);
+
+        projDragRef.current = projDragOverRef.current;
+
+        setRegData({
+            ...regData,
+            projects: newProjs
+        })
+    }
+
+    function projDrop(e:any) {
+        projDragRef.current = null;
+        projDragOverRef.current = null;
     }
 
     return (
@@ -588,7 +618,7 @@ function Edit() {
                                 (regData.projects.length > 0)
                                 &&
                                 regData.projects.map((proj, idx) =>
-                                    <div key={idx} className = "flex items-stretch min-w-max">
+                                    <div key={idx} className = "flex items-stretch min-w-max" draggable onDragStart={(e) => projDragStart(e, idx)} onDragEnter={(e) => projDragEnter(e, idx)} onDrop = {projDrop}>
                                         <ProjectDisplay key={idx} proj={proj} />
                                         <AiFillDelete className="text-red-500 relative top-12 right-12 z-10 text-lg float-right cursor-pointer" onClick={() => deleteProject(idx)} />
                                     </div>
