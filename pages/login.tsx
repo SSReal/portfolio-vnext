@@ -78,8 +78,8 @@ function Login() {
                 <input name="username" type="text" value = {username} onChange = {changeHandler}/>
                 <label htmlFor="password">Password: </label>
                 <input name="password" type="password" value = {password} onChange = {changeHandler}/>
-                <button className="my-5 mx-10 col-start-2" onClick={login}>Login</button>
-                <Link href = "/register" className="hover:scale-105 hover:bg-opacity-10 hover:bg-gray-600 border-2 border-gray-200 rounded-lg text-center py-2 mx-10 col-start-2">Sign up</Link>
+                <button className="my-5 mx-5 col-start-2" onClick={login}>Login</button>
+                <Link href = "/register" className="hover:scale-105 hover:bg-opacity-10 hover:bg-gray-600 border-2 border-gray-200 rounded-lg text-center py-2 mx-5 col-start-2">Sign up</Link>
             </div>
 
         </div>

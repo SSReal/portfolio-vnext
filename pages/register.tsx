@@ -76,8 +76,8 @@ function Register() {
                 <input name="password" type="password" value = {password} onChange = {changeHandler}/>
                 <label htmlFor="cpassword">Confirm Password: </label>
                 <input name="cpassword" type="password" value = {cpassword} onChange = {changeHandler}/>
-                <button className="my-5 mx-10 col-start-2" onClick={regUser}>Sign up</button>
-                <Link href = "/login" className="hover:scale-105 hover:bg-opacity-10 hover:bg-gray-600 border-2 border-gray-200 rounded-lg text-center py-2 mx-10 col-start-2">Login</Link>
+                <button className="my-5 mx-5 col-start-2" onClick={regUser}>Sign up</button>
+                <Link href = "/login" className="hover:scale-105 hover:bg-opacity-10 hover:bg-gray-600 border-2 border-gray-200 rounded-lg text-center py-2 mx-5 col-start-2">Login</Link>
             </div>
 
         </div>
