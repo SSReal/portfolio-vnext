@@ -572,9 +572,6 @@ function Edit() {
                         </div>
                     </section>
 
-                    <b> Experience: </b><br />
-
-
                     <section className="bg-slate-800 md:max-w-full mx-auto px-5">
                         <h1 className="text-5xl text-white pt-10 font-bold self-start">EXPERIENCE</h1>
                         <p className="text-white text-4xl"><CgScrollH /></p>
