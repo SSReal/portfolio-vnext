@@ -441,6 +441,94 @@ function Edit() {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const skillDragRef:any = useRef(null);
+    const skillDragOverRef:any = useRef(null);
+    
+    function skillDragStart(e:any, pos:number) {
+        skillDragRef.current = pos;
+    }
+
+    function skillDragEnter(e:any, pos:number) {
+        e.preventDefault();
+        if(skillDragRef.current === null) {
+            return;
+        }
+        skillDragOverRef.current = pos;
+        const newSkills = [...regData.skills];
+        const content = newSkills[skillDragRef.current];
+        newSkills.splice(skillDragRef.current, 1);
+        newSkills.splice(skillDragOverRef.current, 0, content);
+        skillDragRef.current = skillDragOverRef.current
+        
+        setRegData({
+            ...regData,
+            skills: newSkills
+        })
+    }
+
+    function skillDragEnd(e:any) {
+        skillDragRef.current = null;
+        skillDragOverRef.current = null;
+    }
+
+    const projDragRef:any = useRef(null);
+    const projDragOverRef:any = useRef(null);
+
+    function projDragStart(e:any, pos:number) {
+        projDragRef.current = pos;
+    }
+
+    function projDragEnter(e:any, pos:number) {
+        e.preventDefault();
+        if(projDragRef.current === null) return;
+        projDragOverRef.current = pos;
+        const newProjs = [...regData.projects];
+        const content = newProjs[projDragRef.current];
+        newProjs.splice(projDragRef.current, 1);
+        newProjs.splice(projDragOverRef.current, 0, content);
+
+        projDragRef.current = projDragOverRef.current;
+
+        setRegData({
+            ...regData,
+            projects: newProjs
+        })
+    }
+
+    function projDragEnd(e:any) {
+        projDragRef.current = null;
+        projDragOverRef.current = null;
+    }
+
+    const expDragRef:any = useRef(null);
+    const expDragOverRef:any = useRef(null);
+
+    function expDragStart(e:any, pos:number) {
+        expDragOverRef.current = null;
+        expDragRef.current = pos;
+    }
+
+    function expDragEnter(e:any, pos:number) {
+        e.preventDefault();
+        if(expDragRef.current === null) return;
+        const newExps = [...regData.experience];
+        const content = newExps[expDragRef.current];
+        expDragOverRef.current = pos;
+        newExps.splice(expDragRef.current, 1);
+        newExps.splice(expDragOverRef.current, 0, content);
+        expDragRef.current = expDragOverRef.current;
+
+        setRegData({
+            ...regData,
+            experience: newExps
+        })
+    }
+
+    function expDragEnd(e:any) {
+        expDragRef.current = null;
+        expDragOverRef.current = null;
+    }
+
     return (
         <div>
             {
@@ -525,7 +613,7 @@ function Edit() {
                             (regData.skills.length > 0)
                             &&
                             regData.skills.map((text, idx) =>
-                                <div key={idx} className="text-center mx-2 my-2">
+                                <div key={idx} className="text-center mx-2 my-2" draggable onDragStart={(e) => skillDragStart(e, idx)} onDragEnter={(e) => skillDragEnter(e, idx)} onDragEnd = {skillDragEnd} >
                                     <AiFillDelete className="text-red-500 text-lg relative left-12 top-5 cursor-pointer" onClick={() => deleteSkill(idx)} />
                                     {getSkillIcon(text)}
                                     <p className="text-sm text-white font-semibold" >{text}</p>
@@ -561,7 +649,7 @@ function Edit() {
                                 (regData.projects.length > 0)
                                 &&
                                 regData.projects.map((proj, idx) =>
-                                    <div key={idx} className = "flex items-stretch min-w-max">
+                                    <div key={idx} className = "flex items-stretch min-w-max" draggable onDragStart={(e) => projDragStart(e, idx)} onDragEnter={(e) => projDragEnter(e, idx)} onDragEnd = {projDragEnd}>
                                         <ProjectDisplay key={idx} proj={proj} />
                                         <AiFillDelete className="text-red-500 relative top-12 right-12 z-10 text-lg float-right cursor-pointer" onClick={() => deleteProject(idx)} />
                                     </div>
@@ -595,7 +683,7 @@ function Edit() {
                                 (regData.experience.length > 0)
                                 &&
                                 regData.experience.map((exp, idx) =>
-                                    <div key={idx} className = "flex items-stretch min-w-max">
+                                    <div key={idx} className = "flex items-stretch min-w-max" draggable onDragStart = {(e) => expDragStart(e, idx)} onDragEnter = {(e) => expDragEnter(e, idx)} onDragEnd = {expDragEnd}>
                                         <ExpDisplay key={idx} exp={exp} />
                                         <AiFillDelete className="text-red-500 relative top-12 right-12 z-10 text-lg cursor-pointer" onClick={() => deleteExp(idx)} />
                                     </div>
