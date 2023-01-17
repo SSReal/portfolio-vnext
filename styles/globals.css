@@ -20,6 +20,7 @@ input {
     border: 1px solid black;
     border-radius: 10px;
     margin: 5px;
+    color:black;
 }
 
 .reveal-from-right:hover {
@@ -36,6 +37,7 @@ select {
     border: 1px solid grey;
     border-radius: 5px;
     margin: 5px;
+    color:black;
 }
 
 button {
