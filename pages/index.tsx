@@ -35,9 +35,16 @@ function Home({
     projects,
     experience,
     contact,
-}: HomeProps) {    
-
+}: HomeProps) {
+    // State for image source, initialized with user's photo or default
+    const [imageSrc, setImageSrc] = useState(profilePhotoPath ? `/${profilePhotoPath.replace(/^\/+/, '')}` : profilePhoto);
     const [menu, setMenu] = useState(false);
+
+    // Effect to update imageSrc if profilePhotoPath prop changes
+    useEffect(() => {
+        setImageSrc(profilePhotoPath ? `/${profilePhotoPath.replace(/^\/+/, '')}` : profilePhoto);
+    }, [profilePhotoPath]);
+
     const menuItems = (
         <>
             <p className=" py-2 px-5 text-2xl"><a href="#intro" ><FaArrowUp /></a></p>
@@ -88,7 +95,16 @@ function Home({
                         </p>
                     </div>
                     <div className="mx-auto w-max rounded-full overflow-hidden">
-                        <Image src={profilePhoto} style={{ "objectFit": "fill" }} width={150} alt={"profile"} />
+                        <Image 
+                            src={imageSrc} 
+                            style={{ "objectFit": "fill" }} 
+                            width={150} 
+                            height={150} // Added height for consistency with edit page and next/image best practices
+                            alt={`${name}'s profile picture`} 
+                            onError={() => {
+                                setImageSrc(profilePhoto); // Fallback to default image
+                            }}
+                        />
                     </div>
                 </section>
 

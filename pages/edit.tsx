@@ -2,7 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, ChangeEvent } from "react";
 import HomeProps, { Contact, Experience, Project } from "../components/homeProps";
 import profilePhoto from "../public/profile.jpg";
 
@@ -56,11 +56,15 @@ function showAlert(q: string) {
     alert(`${q} is mandatory, please enter it!`);
 }
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 function Edit() {
+    const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+    const profileImageInputRef = useRef<HTMLInputElement>(null);
 
     async function submitFormHandler(e: any) {
         setIsLoading(true);
-        const finalData = regData;
+        const finalData = { ...regData }; // Create a new object to avoid mutating state directly
 
         if (regData.name === "") {
             showAlert("Name");
@@ -107,18 +111,49 @@ function Edit() {
                 }
             }
         }
-        const userStr = JSON.stringify(finalData)
-        console.log(userStr);
+
+        const formData = new FormData();
+        // Append all other data from regData
+        Object.keys(finalData).forEach(keyStr => {
+            const key = keyStr as keyof HomeProps;
+            if (finalData[key] !== undefined && finalData[key] !== null) {
+                if (typeof finalData[key] === 'object' || Array.isArray(finalData[key])) {
+                    formData.append(key, JSON.stringify(finalData[key]));
+                } else {
+                     // @ts-ignore
+                    formData.append(key, finalData[key] as string);
+                }
+            }
+        });
+        
+        // Append profile image if selected
+        if (profileImageFile) {
+            formData.append("profileImage", profileImageFile);
+        } else {
+            // If no new file is selected, but there was an existing photo path, send it back
+            // This helps preserve the existing photo if the user doesn't change it
+            if (regData.profilePhotoPath) {
+                formData.append("profilePhotoPath", regData.profilePhotoPath);
+            }
+        }
+
         const token = localStorage.getItem('userToken');
         const res = await fetch('/api/profile/edit', {
             method: "POST",
-            body: JSON.stringify(finalData),
+            body: formData, // No longer JSON.stringify
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                // 'Content-Type' header is automatically set by browser when using FormData
             }
         })
 
-        if (res.status === 403) {
+        if (res.status === 413 || res.status === 415) { // Handle file specific errors from backend
+            const errorData = await res.json();
+            alert(errorData.message || "Error with file upload.");
+            setIsLoading(false);
+            return;
+        }
+        else if (res.status === 403) {
             //user already exists
             alert("This username already exists, please use another one");
             setIsLoading(false);
@@ -145,138 +180,107 @@ function Edit() {
         e.target.style.height = (e.target.scrollHeight) + "px";
     }
 
-    function onChangeHandler(e: any) {
+    function onChangeHandler(e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+        const { name, value } = e.target;
 
-        if (e.target.name === "name") {
-            setRegData({
-                ...regData,
-                name: e.target.value
-            })
+        if (name === "name") {
+            setRegData(prev => ({ ...prev, name: value }));
         }
-        //disable changing the username now
-        // else if (e.target.name === "username") {
-        //     setRegData({
-        //         ...regData,
-        //         username: e.target.value
-        //     })
-        // }
-        else if (e.target.name === "shortDesignation") {
-            setRegData({
-                ...regData,
-                shortDesignation: e.target.value
-            })
+        else if (name === "shortDesignation") {
+            setRegData(prev => ({ ...prev, shortDesignation: value }));
         }
-        else if (e.target.name === "designationLine") {
-            setRegData({
-                ...regData,
-                designationLine: e.target.value
-            })
+        else if (name === "designationLine") {
+            setRegData(prev => ({ ...prev, designationLine: value }));
         }
-        else if (e.target.name === "newSocialLink") {
-            setNewSocialLink(e.target.value)
+        else if (name === "newSocialLink") {
+            setNewSocialLink(value);
         }
-        else if (e.target.name === "socialType") {
-            setSocialType(e.target.value);
+        else if (name === "socialType") {
+            setSocialType(value);
         }
-        else if (e.target.name === "description") {
-            setRegData({
-                ...regData,
-                description: e.target.value
-            })
+        else if (name === "description") {
+            setRegData(prev => ({ ...prev, description: value }));
         }
-        else if (e.target.name === "newSkill") {
-            setNewSkill(e.target.value);
+        else if (name === "newSkill") {
+            setNewSkill(value);
         }
-        else if (e.target.name === "newProjectTitle") {
-            setNewProject({
-                ...newProject,
-                title: e.target.value
-            })
-        }
-        else if (e.target.name === "newProjectDescription") {
-            setNewProject({
-                ...newProject,
-                description: e.target.value
-            })
-        }
-        else if (e.target.name === "newProjectDateRange") {
-            setNewProject({
-                ...newProject,
-                dateRange: e.target.value
-            })
-        }
-        else if (e.target.name === "newProjectGithubLink") {
-            setNewProject({
-                ...newProject,
-                githubLink: e.target.value
-            })
-        }
-        else if (e.target.name === "newProjectDemoLink") {
-            setNewProject({
-                ...newProject,
-                demoLink: e.target.value
-            })
-        }
-        else if (e.target.name === "newExpTitle") {
-            setNewExp({
-                ...newExp,
-                title: e.target.value
-            })
-        }
-        else if (e.target.name === "newExpCompany") {
-            setNewExp({
-                ...newExp,
-                company: e.target.value
-            })
-        }
-        else if (e.target.name === "newExpDescription") {
-            setNewExp({
-                ...newExp,
-                description: e.target.value
-            })
-        }
-        else if (e.target.name === "newExpDateRange") {
-            setNewExp({
-                ...newExp,
-                dateRange: e.target.value
-            })
-        }
-        else if (e.target.name === "phone") {
-            setRegData({
-                ...regData,
-                contact: {
-                    ...regData.contact,
-                    email: regData.contact?.email || "",
-                    phone: e.target.value || "",
+        else if (name === "profileImage") { // Handle file input separately for type safety
+            const inputElement = e.target as HTMLInputElement;
+            const file = inputElement.files && inputElement.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    alert("Invalid file type. Please select an image (e.g., JPG, PNG, GIF).");
+                    setProfileImageFile(null);
+                    if (profileImageInputRef.current) {
+                        profileImageInputRef.current.value = "";
+                    }
+                    return;
                 }
-            })
-        }
-        else if (e.target.name === "email") {
-            setRegData({
-                ...regData,
-                contact: {
-                    ...regData.contact,
-                    email: e.target.value
+                if (file.size > MAX_FILE_SIZE) {
+                    alert(`File is too large (${(file.size / 1024 / 1024).toFixed(2)}MB). Please select an image smaller than ${(MAX_FILE_SIZE / 1024 / 1024).toFixed(0)}MB.`);
+                    setProfileImageFile(null);
+                    if (profileImageInputRef.current) {
+                        profileImageInputRef.current.value = "";
+                    }
+                    return;
                 }
-            })
+                setProfileImageFile(file);
+            } else {
+                setProfileImageFile(null);
+            }
         }
-        else if (e.target.name === "location") {
-            setRegData({
-                ...regData,
-                contact: {
-                    ...regData.contact,
-                    email: regData.contact?.email || "",
-                    location: e.target.value || ""
-                }
-            })
+        else if (name === "newProjectTitle") {
+            setNewProject(prev => ({ ...prev, title: value }));
+        }
+        else if (name === "newProjectDescription") {
+            setNewProject(prev => ({ ...prev, description: value }));
+        }
+        else if (name === "newProjectDateRange") {
+            setNewProject(prev => ({ ...prev, dateRange: value }));
+        }
+        else if (name === "newProjectGithubLink") {
+            setNewProject(prev => ({ ...prev, githubLink: value }));
+        }
+        else if (name === "newProjectDemoLink") {
+            setNewProject(prev => ({ ...prev, demoLink: value }));
+        }
+        else if (name === "newExpTitle") {
+            setNewExp(prev => ({ ...prev, title: value }));
+        }
+        else if (name === "newExpCompany") {
+            setNewExp(prev => ({ ...prev, company: value }));
+        }
+        else if (name === "newExpDescription") {
+            setNewExp(prev => ({ ...prev, description: value }));
+        }
+        else if (name === "newExpDateRange") {
+            setNewExp(prev => ({ ...prev, dateRange: value }));
+        }
+        else if (name === "phone") {
+            setRegData(prev => ({
+                ...prev,
+                contact: { ...(prev.contact || defaultContact), phone: value }
+            }));
+        }
+        else if (name === "email") {
+            setRegData(prev => ({
+                ...prev,
+                contact: { ...(prev.contact || defaultContact), email: value }
+            }));
+        }
+        else if (name === "location") {
+            setRegData(prev => ({
+                ...prev,
+                contact: { ...(prev.contact || defaultContact), location: value }
+            }));
         }
     }
-    const [regData, setRegData] = useState(defaultRegData);
+    const [regData, setRegData] = useState<HomeProps>(defaultRegData);
     const [newSocialLink, setNewSocialLink] = useState("");
     const [socialType, setSocialType] = useState("select");
     const [newSkill, setNewSkill] = useState("select");
-    const [newProject, setNewProject] = useState(defaultProject);
-    const [newExp, setNewExp] = useState(defaultExp);
+    const [newProject, setNewProject] = useState<Project>(defaultProject);
+    const [newExp, setNewExp] = useState<Experience>(defaultExp);
 
     const router = useRouter();
 
@@ -594,11 +598,30 @@ function Edit() {
                                 {regData.description || "Enter Description"}
                             </p>
                         </div>
-                        <div className="mx-auto w-max rounded-full overflow-hidden">
-                            <Image src={profilePhoto} style={{ "objectFit": "fill" }} width={150} alt={"profile"} />
+                        <div className="mx-auto w-max rounded-full overflow-hidden my-4">
+                            <Image
+                                src={profileImageFile ? URL.createObjectURL(profileImageFile) : (regData.profilePhotoPath ? `/${regData.profilePhotoPath.replace(/^\/+/, '')}` : profilePhoto)}
+                                style={{ "objectFit": "cover" }} // Changed to cover for better aspect ratio
+                                width={150}
+                                height={150}
+                                alt="Profile Preview"
+                                className="rounded-full" // Make it circular if not already
+                            />
+                        </div>
+                        <div className="my-2">
+                            <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700">Profile Image (Max 5MB):</label>
+                            <input
+                                id="profileImage"
+                                name="profileImage"
+                                type="file"
+                                accept="image/*"
+                                onChange={onChangeHandler}
+                                ref={profileImageInputRef}
+                                className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:border-sky-500"
+                            />
                         </div>
                     </section>
-                    <select name="newSkill" value={newSkill} onChange={onChangeHandler}>
+                    <select name="newSkill" value={newSkill} onChange={onChangeHandler as any}>
                         <option value="select">Please Select Skill</option>
                         <option value="React">React</option>
                         <option value="Next.js">Next.js</option>
